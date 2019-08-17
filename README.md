@@ -41,16 +41,31 @@ A protocol super-server.
 
 _Note: Tokens are signed and should increase to 255 and then return to one. This provides a sanity check. If a token ever goes negative we should bail out._
 
-| SINT16 | SERVER METHODS | Description                                   |
-|--------|----------------|-----------------------------------------------|
-| 0x0000 | PING           | Send message asking if server/child is alive. |
-| 0x0001 | ACKNOWLEDGE    | Acknowledge request defined by token.         |
-| 0x0002 | CONNECT        |                                               |
-| 0x0003 | MESSAGE        |                                               |
-| 0x0082 | ACCEPT         |                                               |
-| 0x0083 |                |                                               |
-| 0x5046 | PF             |                                               |
-| 0x8001 | FAILURE        |                                               |
+| SINT16 | SERVER METHODS | Description                                      |
+|--------|----------------|--------------------------------------------------|
+| 0x0000 | PING           | Send message asking if server/child is alive.    |
+| 0x0001 | ACKNOWLEDGE    | Acknowledge request defined by token.            |
+| 0x0002 | CONNECT        |                                                  |
+| 0x0003 | MESSAGE        |                                                  |
+| 0x0082 | ACCEPT         |                                                  |
+| 0x     |                |                                                  |
+| 0x5046 | PF             |                                                  |
+| 0x8001 | FAILURE        |                                                  |
+| 0x     | MALFORMED      | Notice that a preprocessing directive failed.    |
+| 0x     |                |                                                  |
+| 0x     | ALTBIND        | Allow termporal binding to an additional port.   |
+| 0x     | ACCEPT         | Accept the socket connection.                    |
+| 0x     | REJECT         | Tell Server to reject the connect                |
+| 0x     | CLOSE          | Tell Server/Child to close the connection        |
+| 0x     |                |                                                  |
+| 0x     | PREPROCESSOR   | Specify preprocessor for inbound data            |
+
+
+| OPCODE | OPERATION      | ALGORITHM 
+|--------|----------------|-----------
+| 0x0001 | SCAN           | Pop argc, pop argv(argnames), pop scanstring, exec and push to stack.
+| 0x0002 | STRUCT         | pop argc, pop argv(argnames), apply struct, exec, and push to stack.
+
 
 PF_CONNECT [LOCAL] [REMOTE] : Begin SOCK_STREAM connection oriented session
 MESSAGE [LOCAL] [REMOTE] [LEN] [CONTENT] : SOCK_DGRAM notice.
