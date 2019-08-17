@@ -27,7 +27,7 @@ A protocol super-server.
  4. pfinetd starts another process, immediately moving to inetd-mode interaction.
 
 ### pf-mode
- 0. The child has sent the 'PFM?\n' blurb to the server.
+ 0. The child has sent the 'PF00\n' blurb to the server.
  1. The server immediately sends 'PFM/1.0 200 OK' to the child with supported options which can be set as named-value pairs.
  2. The child can choose to either ignore or set any attributes with an option response.
  3. The server acknowledges any options set in the next message to the child.
@@ -35,12 +35,43 @@ A protocol super-server.
  
 ## Syntax
 
-### Child Methods
- * PFM?: Promote to pfinetd mode.
- * 
+| TOKEN  | SERVER METHOD | TLV-Length | ...TLVs  | Data     |
++--------+---------------+------------+----------+----------+
+| 8-bits |    16-bits    |  16-bits   | variable | variable |
 
-### Server Methods
- * 
+_Note: Tokens are signed and should increase to 255 and then return to one. This provides a sanity check. If a token ever goes negative we should bail out._
+
+| SINT16 | SERVER METHODS | Description                                   |
++--------+----------------+-----------------------------------------------+
+| 0x0000 | PING           | Send message asking if server/child is alive. |
+| 0x0001 | ACKNOWLEDGE    | Acknowledge request defined by token.         |
+| 0x0002 | CONNECT        |                                               |
+| 0x0003 | MESSAGE        |                                               |
+| 0x0082 | ACCEPT         |                                               |
+| 0x0083 |                |                                               |
+| 0x5046 | PF             |                                               |
+| 0x8001 | FAILURE        |                                               |
+
+PF_CONNECT [LOCAL] [REMOTE] : Begin SOCK_STREAM connection oriented session
+MESSAGE [LOCAL] [REMOTE] [LEN] [CONTENT] : SOCK_DGRAM notice.
+MALFORMED []
+ACK [
+
+### Child Methods
+ * PF : 'Magic' Promote to pfinetd mode.
+ * SCAN [SCAN-STRING] {'ARG1','ARG2',: Submit scanf string to preprocess inbound header information. 
+ * COMPLEX [COMPLEX] - Predefined iterative header processes.
+ * ALTBIND : Ask for Ephemeral port for side-channel.
+ * ACCEPT [ORIGIN] [REMOTE]
+
+    __Method Arguments__
+    
+    __Complexes__
+    METHOD-LINE [: 
+    KEY-VALUE
+    DOUBLE-NEWLINE
+    NULL
+
 
 ### Options
  * NAME: Server Name (Prepended to log entries)
