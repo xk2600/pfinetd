@@ -36,13 +36,13 @@ A protocol super-server.
 ## Syntax
 
 | TOKEN  | SERVER METHOD | TLV-Length | ...TLVs  | Data     |
-+--------+---------------+------------+----------+----------+
+|--------|---------------|------------|----------|----------|
 | 8-bits |    16-bits    |  16-bits   | variable | variable |
 
 _Note: Tokens are signed and should increase to 255 and then return to one. This provides a sanity check. If a token ever goes negative we should bail out._
 
 | SINT16 | SERVER METHODS | Description                                   |
-+--------+----------------+-----------------------------------------------+
+|--------|----------------|-----------------------------------------------|
 | 0x0000 | PING           | Send message asking if server/child is alive. |
 | 0x0001 | ACKNOWLEDGE    | Acknowledge request defined by token.         |
 | 0x0002 | CONNECT        |                                               |
