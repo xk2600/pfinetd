@@ -58,8 +58,8 @@ _pfd: pseudo file descriptor - identifies the session. As attributes become avai
 
 #### watchdog enquiry packet: _(SYN, SOH, tvlcount: 0 tlvs, datalen: 0 bytes, ENQ)_
 
-|----|----|----|------|----|
 |0x16|0x01|0x00|0x0000|0x05|
+|----|----|----|------|----|
 
 ....or...
 
