@@ -37,49 +37,73 @@ A protocol super-server.
 
 #### Control Packet
 
-|SYN |SOH | tlvcount | ...tlvs... | datalen | data
-|----|----|----------|-----/ /----|---------|----------
-|0x16|0x01| uint8    | ...Var...  | 16-bit  | var.
+|SYN |SOH |tlvcount|...tlvs...|pfd   |datalen|...data
+|----|----|--------|----------|------|-------|-------
+|0x16|0x01|uint8   |...Var... |32-bit|16-bit |...var
 
-_NOTE: Maximum buffer length is 256 TLVs + 65KB _
+_pfd: pseudo file descriptor - identifies the session. As attributes become available a pfd tlv will be transmitted with attributes about the remote client._
 
-#### Type-Length-Value Packet
+#### Terminators
+
+|code|terminator                      |use/description
+|----|--------------------------------|---------------
+|0x04|EOT - End of Transmission       |REmote client has requested end of converstation, requires acknowledgement
+|0x05|ENQ - Enquiry                   |watchdog timer half-life enquiry
+|0x06|ACK - Acknowledgement           |Acknowledge an Enquiry
+|0x15|NAK - Negative Acknowledgement  |Tell the server/child there was a recoverable error...
+|0x16|SYN - Sync                      |Start of message
+|0x17|ETB - End of Transmission Block |end of chunk, requires acknowledgement, more data is coming...
+|0x18|CAN - Cancel                    |terminate session in error
+|0x19|EM  - End of Medium             |Successful transmission, no response needed. (Mainly for datagrams, or non TCP)
+
+#### watchdog enquiry packet: _(SYN, SOH, tvlcount: 0 tlvs, datalen: 0 bytes, ENQ)_
+
+|0x16|0x01|0x00|0x0000|0x05|
+
+....or...
+
+|0x16|0x02|0x05|
+
+#### data only: _(SYN, STX, pfd: 1, datalen: 16 bytes, data, ENQ)_
+
+|0x16|0x02|0x00000001|0x0010|...data...|0x05|
+
+#### acknowledgement only: _(SYN, ACK, pfd: 1)_
+
+|0x16|0x06|0x00000001|
+
+#### Type-Length-Value 
 |type |length|value
 |-----|------|-----
-|8-bit|8-bit |8-bit
+|8-bit|8-bit |variable
+
+#### TLV Types
+
+|code|Description        |length|
+|----|-------------------|------|
+|0x01|sock-type          |8-bits|
+|0x04|address-family     |8-bits| 
+|0x06|ipv6-remote-tupple 
+|0x02|CONNECT        
+|0x03|MESSAGE        
+|0x82|ACCEPT         
+|0x06|ACKNOWLEDGE     Acknowledge request defined by token.
+|0x  |               
+|0x01|FAILURE        
+|0x  |MALFORMED       Notice that a preprocessing directive failed.
+|0x  |               
+|0x  |ALTBIND         Allow termporal binding to an additional port.
+|0x  |ACCEPT          Accept the socket connection.
+|0x  |REJECT          Tell Server to reject the connect
+|0x  |CLOSE           Tell Server/Child to close the connection
+|0x  |               
+|0x  |PREPROCESSOR    Specify preprocessor execution stack for inbound data
 
 
-#### Acknowledgement
-
-| SYN  | SOH  |
-|------|------|
-| 0x16 | 0x01 |
+#### pfd tlv:
+|
 
 
-#### 
-
-_Note: Tokens are signed and should increase to 255 and then return to one. This provides a sanity check. If a token ever goes negative we should bail out._
-
-| SINT16 | SERVER METHODS | Description
-|--------|----------------|------------
-| 0x0000 | NULL           | Used as a watchdog timer. 
-
-| 0x0016 | SYN            | 
-| 0x0002 | CONNECT        |
-| 0x0003 | MESSAGE        |
-| 0x0082 | ACCEPT         |
-| 0x0006 | ACKNOWLEDGE    | Acknowledge request defined by token.
-| 0x     |                |
-| 0x5046 | PF             |
-| 0x8001 | FAILURE        |
-| 0x     | MALFORMED      | Notice that a preprocessing directive failed.
-| 0x     |                |
-| 0x     | ALTBIND        | Allow termporal binding to an additional port.
-| 0x     | ACCEPT         | Accept the socket connection.
-| 0x     | REJECT         | Tell Server to reject the connect
-| 0x     | CLOSE          | Tell Server/Child to close the connection
-| 0x     |                |
-| 0x     | PREPROCESSOR   | Specify preprocessor execution stack for inbound data
 
 #### Preprocessor Operations
 
