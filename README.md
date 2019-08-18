@@ -37,9 +37,17 @@ A protocol super-server.
 
 #### Control Packet
 
-| SYN  | SOH  | TLV Count | ...TLVs | Data     |
-|------|------|-----------|---------|----------|----------|
-| 0x16 | 0x01 | 8-bits    | 16-bits | variable | variable |
+|SYN |SOH | tlvcount | ...tlvs... | datalen | data
+|----|----|----------|-----/ /----|---------|----------
+|0x16|0x01| uint8    | ...Var...  | 16-bit  | var.
+
+_NOTE: Maximum buffer length is 256 TLVs + 65KB _
+
+#### Type-Length-Value Packet
+|type |length|value
+|-----|------|-----
+|8-bit|8-bit |8-bit
+
 
 #### Acknowledgement
 
