@@ -38,6 +38,7 @@ A protocol super-server.
 #### Abbreviations
 
 |code|abbreviation : name       |....|Code|abbreviation : name  |....|Code|abbreviation : name           |....|Code|abbreviation : name
+|----|--------------------------|----|----|---------------------|----|----|------------------------------|----|----|-------------------
 |0x00|NUL : null                |    |0x08|BS : backspace       |    |0x10|DLE : data-link-escape        |    |0x18|CAN : cancel
 |0x01|SOH : start-of-header     |    |0x09|HT : horizontal-tab  |    |0x11|DC1/XON                       |    |0x19|EM  : end-of-medium
 |0x02|STX : start-of-text       |    |0x0A|LF : line-feed       |    |0x12|DC2                           |    |0x1A|SUB : substitute
