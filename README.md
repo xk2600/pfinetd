@@ -37,24 +37,24 @@ A protocol super-server.
 
 #### Abbreviations
 
-|code|abbreviation : name       |....|Code|abbreviation : name  |....|Code|abbreviation : name           |....|Code|abbreviation : name
-|----|--------------------------|----|----|---------------------|----|----|------------------------------|----|----|-------------------
-|0x00|NUL : null                |    |0x08|BS : backspace       |    |0x10|DLE : data-link-escape        |    |0x18|CAN : cancel
-|0x01|SOH : start-of-header     |    |0x09|HT : horizontal-tab  |    |0x11|DC1/XON                       |    |0x19|EM  : end-of-medium
-|0x02|STX : start-of-text       |    |0x0A|LF : line-feed       |    |0x12|DC2                           |    |0x1A|SUB : substitute
-|0x03|ETX : end-of-text         |    |0x0B|VT : vertical-tab    |    |0x13|DC3/XOFF                      |    |0x1B|ESC : escape
-|0x04|EOT : end-of-transmission |    |0x0C|FF : form-feed       |    |0x14|DC4                           |    |0x1C|FS  : file-separator
-|0x05|ENQ : enquiry             |    |0x0D|CR : carriage-return |    |0x15|NAK : negative-acknowledgement|    |0x1D|GS  : group-separator
-|0x06|ACK : acknowledgement     |    |0x0E|SO : shift-out       |    |0x16|SYN : synchronous idle        |    |0x1E|RS  : record-separator
-|0x07|BEL : bell/alert          |    |0x0F|SI : shift-in        |    |0x17|ETB : end-transmission-block  |    |0x1F|US  : unit separator
-
-
-
-
-
-
-
-
+|code|abbreviation : name       |....|Code|abbreviation : name
+|----|--------------------------|----|---------------------------
+|0x00|NUL : null                |    |0x10|DLE : data-link-escape
+|0x01|SOH : start-of-header     |    |0x11|DC1/XON
+|0x02|STX : start-of-text       |    |0x12|DC2
+|0x03|ETX : end-of-text         |    |0x13|DC3/XOFF
+|0x04|EOT : end-of-transmission |    |0x14|DC4
+|0x05|ENQ : enquiry             |    |0x15|NAK : negative-acknowledgement
+|0x06|ACK : acknowledgement     |    |0x16|SYN : synchronous idle
+|0x07|BEL : bell/alert          |    |0x17|ETB : end-transmission-block
+|0x08|BS : backspace            |    |0x18|CAN : cancel
+|0x09|HT : horizontal-tab       |    |0x19|EM  : end-of-medium
+|0x0A|LF : line-feed            |    |0x1A|SUB : substitute
+|0x0B|VT : vertical-tab         |    |0x1B|ESC : escape
+|0x0C|FF : form-feed            |    |0x1C|FS  : file-separator
+|0x0D|CR : carriage-return      |    |0x1D|GS  : group-separator
+|0x0E|SO : shift-out            |    |0x1E|RS  : record-separator
+|0x0F|SI : shift-in             |    |0x1F|US  : unit separator
 
 #### Control Packet
 
