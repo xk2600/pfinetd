@@ -35,55 +35,60 @@ A protocol super-server.
  
 ## Syntax
 
+#### Abbreviations
+
+|code|abbreviation : name       |....|Code|abbreviation : name  |....|Code|abbreviation : name           |....|Code|abbreviation : name
+|0x00|NUL : null                |    |0x08|BS : backspace       |    |0x10|DLE : data-link-escape        |    |0x18|CAN : cancel
+|0x01|SOH : start-of-header     |    |0x09|HT : horizontal-tab  |    |0x11|DC1/XON                       |    |0x19|EM  : end-of-medium
+|0x02|STX : start-of-text       |    |0x0A|LF : line-feed       |    |0x12|DC2                           |    |0x1A|SUB : substitute
+|0x03|ETX : end-of-text         |    |0x0B|VT : vertical-tab    |    |0x13|DC3/XOFF                      |    |0x1B|ESC : escape
+|0x04|EOT : end-of-transmission |    |0x0C|FF : form-feed       |    |0x14|DC4                           |    |0x1C|FS  : file-separator
+|0x05|ENQ : enquiry             |    |0x0D|CR : carriage-return |    |0x15|NAK : negative-acknowledgement|    |0x1D|GS  : group-separator
+|0x06|ACK : acknowledgement     |    |0x0E|SO : shift-out       |    |0x16|SYN : synchronous idle        |    |0x1E|RS  : record-separator
+|0x07|BEL : bell/alert          |    |0x0F|SI : shift-in        |    |0x17|ETB : end-transmission-block  |    |0x1F|US  : unit separator
+
+
+
+
+
+
+
+
+
 #### Control Packet
 
-|SYN |SOH |tlvcount|...tlvs...|pfd   |datalen|...data
-|----|----|--------|----------|------|-------|-------
-|0x16|0x01|uint8   |...Var... |32-bit|16-bit |...var
+|SYN |SOH |tlvcount|0-255 tlv packets
+|----|----|--------|-----------------
+|0x16|0x01|uint8   |variable length
 
-_pfd: pseudo file descriptor - identifies the session. As attributes become available a pfd tlv will be transmitted with attributes about the remote client._
-
-#### Terminators
-
-|code|terminator                      |use/description
-|----|--------------------------------|---------------
-|0x04|EOT - End of Transmission       |REmote client has requested end of converstation, requires acknowledgement
-|0x05|ENQ - Enquiry                   |watchdog timer half-life enquiry
-|0x06|ACK - Acknowledgement           |Acknowledge an Enquiry
-|0x15|NAK - Negative Acknowledgement  |Tell the server/child there was a recoverable error...
-|0x16|SYN - Sync                      |Start of message
-|0x17|ETB - End of Transmission Block |end of chunk, requires acknowledgement, more data is coming...
-|0x18|CAN - Cancel                    |terminate session in error
-|0x19|EM  - End of Medium             |Successful transmission, no response needed. (Mainly for datagrams, or non TCP)
-
-#### watchdog enquiry packet: _(SYN, SOH, tvlcount: 0 tlvs, datalen: 0 bytes, ENQ)_
-
-|0x16|0x01|0x00|0x0000|0x05|
-|----|----|----|------|----|
-
-....or...
-
-|0x16|0x02|0x05|
-
-#### data only: _(SYN, STX, pfd: 1, datalen: 16 bytes, data, ENQ)_
-
-|0x16|0x02|0x00000001|0x0010|...data...|0x05|
-
-#### acknowledgement only: _(SYN, ACK, pfd: 1)_
-
-|0x16|0x06|0x00000001|
+    #### watchdog packet: _(SYN, SOH, tvlcount: 0 tlvs)_
+    
+    |0x16|0x01|0x00|
+    |----|----|----|
+    
+    #### data only: _(SYN, STX, pfd: 1, datalen: 16 bytes, data, ENQ)_
+    
+    |0x16|0x02|0x00000001|0x0010|...data...|0x05|
+    |----|----|----------|------|----------|----|
+    
+    #### acknowledgement only: _(SYN, ACK, pfd: 1)_
+    
+    |0x16|0x06|0x00000001|
+    |----|----|----------|
 
 #### Type-Length-Value 
 |type |length|value
 |-----|------|-----
 |8-bit|8-bit |variable
 
+_pfd: pseudo file descriptor - identifies the session. As attributes become available a pfd tlv will be transmitted with attributes about the remote client._
+
 #### TLV Types
 
-|code|Description        |length|
-|----|-------------------|------|
-|0x01|sock-type          |8-bits|
-|0x04|address-family     |8-bits| 
+|code|length|description
+|----|------|---------
+|0x01|8-bits|pfd : pseudo-file-descriptor
+|0x04|8-bits|address-family
 |0x06|ipv6-remote-tupple 
 |0x02|CONNECT        
 |0x03|MESSAGE        
@@ -100,11 +105,20 @@ _pfd: pseudo file descriptor - identifies the session. As attributes become avai
 |0x  |               
 |0x  |PREPROCESSOR    Specify preprocessor execution stack for inbound data
 
+#### data tlv: (server->child)
+|0x00|buffer-length|buffer-contents
+|----|-------------|---------------
 
-#### pfd tlv:
-|
+#### pfd tlv: (server->child)
+|0x01|byte-length|pfd-data
+|----|-----------|--------
 
-
+    #### pfd-data:
+    |pfd   |
+    |------|
+    |4-byte|
+    
+    (*) pfd : pseudo-file-descriptor : index into the specific remote client tlv is referencing.
 
 #### Preprocessor Operations
 
