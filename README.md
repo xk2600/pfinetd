@@ -79,7 +79,7 @@ A protocol super-server.
 |-----|------|-----
 |8-bit|8-bit |variable
 
-_pfd: pseudo file descriptor - identifies the session. As attributes become available a pfd tlv will be transmitted with attributes about the remote client._
+* _pfd: pseudo file descriptor - identifies the session. As attributes become available a pfd tlv will be transmitted with attributes about the remote client._
 
 #### TLV Types
 
