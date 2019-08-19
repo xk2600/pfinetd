@@ -56,11 +56,10 @@ A protocol super-server.
 |0x0E|SO:  shift-out           |    |0x1E|RS:  record-separator
 |0x0F|SI:  shift-in            |    |0x1F|US:  unit separator
 
+
 #### Control Packet
 
-|SYN |SOH |tlvcount|0-255 tlv packets
-|----|----|--------|-----------------
-|0x16|0x01|uint8   |variable length
+    `[SYN|SOH|tlvcount (byte)|0-255 tlv packets]`
 
 * **watchdog packet:** _(SYN, SOH, tvlcount: 0 tlvs)_
     
@@ -74,38 +73,35 @@ A protocol super-server.
     
     `[0x16|0x06|0x00000001]`
 
-#### Type-Length-Value 
+
+#### Type-Length-Value Packet
 |type |length|value
 |-----|------|-----
 |8-bit|8-bit |variable
 
 * _pfd: pseudo file descriptor - identifies the session. As attributes become available a pfd tlv will be transmitted with attributes about the remote client._
 
+
 #### TLV Types
 
 |code|length|description
 |----|------|---------
 |0x01|8-bits|pfd : pseudo-file-descriptor
-|0x04|8-bits|address-family
-|0x06|ipv6-remote-tupple 
 |0x02|CONNECT        
 |0x03|MESSAGE        
 |0x82|ACCEPT         
-|0x06|ACKNOWLEDGE     Acknowledge request defined by token.
 |0x  |               
 |0x01|FAILURE        
-|0x  |MALFORMED       Notice that a preprocessing directive failed.
+|0x  |MALFORMED    |Notice that a preprocessing directive failed.
+|0x  |ALTBIND      |Allow termporal binding to an additional port.
+|0x  |ACCEPT       |Accept the socket connection.
+|0x  |REJECT       |Tell Server to reject the connect
+|0x  |CLOSE        |Tell Server/Child to close the connection
 |0x  |               
-|0x  |ALTBIND         Allow termporal binding to an additional port.
-|0x  |ACCEPT          Accept the socket connection.
-|0x  |REJECT          Tell Server to reject the connect
-|0x  |CLOSE           Tell Server/Child to close the connection
-|0x  |               
-|0x  |PREPROCESSOR    Specify preprocessor execution stack for inbound data
+|0x  |PREPROCESSOR |Specify preprocessor execution stack for inbound data
 
 #### data tlv: (server->child)
 |0x00|buffer-length|buffer-contents
-|----|-------------|---------------
 
 #### pfd tlv: (server->child)
 |0x01|byte-length|pfd-data
