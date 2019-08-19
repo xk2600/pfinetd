@@ -62,15 +62,15 @@ A protocol super-server.
 |----|----|--------|-----------------
 |0x16|0x01|uint8   |variable length
 
- + **watchdog packet: (SYN, SOH, tvlcount: 0 tlvs)
+* **watchdog packet: _(SYN, SOH, tvlcount: 0 tlvs)_**
     
     `[0x16|0x01|0x00]`
     
- + **data only: _(SYN, STX, pfd: 1, datalen: 16 bytes, data, ENQ)_
+* **data only: _(SYN, STX, pfd: 1, datalen: 16 bytes, data, ENQ)_**
     
     `[0x16|0x02|0x00000001|0x0010|...data...|0x05]`
     
- + **acknowledgement only: _(SYN, ACK, pfd: 1)_
+* **acknowledgement only: _(SYN, ACK, pfd: 1)_**
     
     `[0x16|0x06|0x00000001]`
 
